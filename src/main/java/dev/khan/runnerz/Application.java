@@ -19,7 +19,6 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-
 	@Bean
 	UserHttpClient userHttpClient() {
 		RestClient restClient = RestClient.create("https://jsonplaceholder.typicode.com/");

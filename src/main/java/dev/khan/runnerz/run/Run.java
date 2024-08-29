@@ -18,8 +18,6 @@ public record Run(
         LocalDateTime completedOn,
         @Positive
         Integer kilometers,
-        Location location,
-        @Version
-        Integer version
+        Location location
 ) {
 }

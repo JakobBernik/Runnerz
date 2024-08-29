@@ -31,11 +31,12 @@ public class JdbcClientRunRepository {
     }
 
     public void create(Run run) {
-        var updated = jdbcClient.sql("INSERT INTO Run(id,title,started_on,completed_on,kilometers,location) values(?,?,?,?,?,?)")
-                .params(List.of(run.id(),run.title(),run.startedOn(),run.completedOn(),run.kilometers(),run.location().toString()))
-                .update();
-
-        Assert.state(updated == 1, "Failed to create run " + run.title());
+        if(findById(run.id()).isEmpty()) {
+            var updated = jdbcClient.sql("INSERT INTO Run(id,title,started_on,completed_on,kilometers,location) values(?,?,?,?,?,?)")
+                    .params(List.of(run.id(), run.title(), run.startedOn(), run.completedOn(), run.kilometers(), run.location().toString()))
+                    .update();
+            Assert.state(updated == 1, "Failed to create run " + run.title());
+        }
     }
 
     public void update(Run run, Integer id) {
@@ -62,7 +63,7 @@ public class JdbcClientRunRepository {
         runs.stream().forEach(this::create);
     }
 
-    public List<Run> findByLocation(String location) {
+    public List<Run> findAllByLocation(String location) {
         return jdbcClient.sql("select * from run where location = :location")
                 .param("location", location)
                 .query(Run.class)
